@@ -78,3 +78,7 @@ class Controller:
                 code = 500
                 status = "fail"
             return ({'status': status, "data": res_data, "message": message}, code)
+
+
+    def logout(self):
+        return ({'status': 'logout passed'}, 200)
