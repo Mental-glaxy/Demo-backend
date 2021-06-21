@@ -6,7 +6,7 @@ class Controller:
     def __init__(self):
         pass
 
-    def signup(self,db,request):
+    def signup(self,db,request, bcrypt):
         message = ""
         code = 500
         status = "fail"
@@ -35,14 +35,14 @@ class Controller:
         return ({'status': status, "message": message}, code)
 
 
-    def login(self, db, request,secret):
+    def login(self, db, request,secret,bcrypt):
             message = ""
             res_data = {}
             code = 500
             status = "fail"
             try:
                 data = request.get_json()
-                user = db['users'].find_one({"email": f'{data["email"]}'})
+                user = db['users'].find_one({"login": f'{data["login"]}'})
 
                 if user:
                     user['_id'] = str(user['_id'])
@@ -50,7 +50,7 @@ class Controller:
                         time = datetime.utcnow() + timedelta(hours=24)
                         token = jwt.encode({
                             "user": {
-                                "email": f"{user['email']}",
+                                "login": f"{user['login']}",
                                 "id": f"{user['_id']}",
                             },
                             "exp": time
