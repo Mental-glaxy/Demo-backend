@@ -6,8 +6,9 @@ class Controller:
     def __init__(self):
         pass
 
-    def signup(self,db,request, bcrypt):
+    def signup(self,db,request, bcrypt, secret):
         message = ""
+        token = ""
         code = 500
         status = "fail"
         try:
@@ -25,6 +26,14 @@ class Controller:
                 # this is bad practice since the data is not being checked before insert
                 res = db["users"].insert_one(data)
                 if res.acknowledged:
+                    time = datetime.utcnow() + timedelta(hours=24)
+                    token = jwt.encode({
+                        "user": {
+                            "login": f"{data['login']}",
+                            "email": f"{data['email']}",
+                        },
+                        "exp": time
+                    }, secret)
                     status = "successful"
                     message = "user created successfully"
                     code = 201
@@ -32,7 +41,7 @@ class Controller:
             message = f"{ex}"
             status = "fail"
             code = 500
-        return ({'status': status, "message": message}, code)
+        return {'status': status, "message": message, "token": token}, code
 
 
     def login(self, db, request,secret,bcrypt):
@@ -61,7 +70,7 @@ class Controller:
                         message = f"user authenticated"
                         code = 200
                         status = "successful"
-                        res_data['token'] = token.decode('utf-8')
+                        res_data['token'] = token
                         res_data['user'] = user
 
                     else:
@@ -77,8 +86,8 @@ class Controller:
                 message = f"{ex}"
                 code = 500
                 status = "fail"
-            return ({'status': status, "data": res_data, "message": message}, code)
+            return {'status': status, "data": res_data, "message": message}, code
 
 
     def logout(self):
-        return ({'status': 'logout passed'}, 200)
+        return {'status': 'logout passed'}, 200

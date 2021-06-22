@@ -3,3 +3,4 @@ Flask-PyMongo
 flask-jwt-extended
 PyJWT
 Flask-Bcrypt
+Flask-Cors
