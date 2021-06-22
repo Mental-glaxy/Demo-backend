@@ -4,3 +4,4 @@ flask-jwt-extended
 PyJWT
 Flask-Bcrypt
 Flask-Cors
+Flask-JWT

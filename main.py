@@ -1,13 +1,12 @@
 from flask import Flask, request, jsonify
 from pymongo import MongoClient
-from bson.objectid import ObjectId
 from flask_bcrypt import Bcrypt
 from functools import wraps
 from flask_cors import CORS
-import jwt
+from flask_jwt  import JWT, jwt_required,current_identity
 import controllers.Config as config
 import controllers.Controller as ctrl
-
+import jwt
 controller = ctrl.Controller()
 conf = config.Config()
 app = Flask(__name__)
@@ -18,18 +17,19 @@ bcrypt = Bcrypt(app)
 secret = conf.data('secret')
 CORS(app, resources={r"/*": {"origins": "*"}})
 
+
 def tokenReq(f):
     @wraps(f)
     def decorated(*args, **kwargs):
         if "Authorization" in request.headers:
             token = request.headers["Authorization"]
             try:
-                jwt.decode(str(token), secret)
+                jwt.decode(str(token), secret, algorithms="HS256")
             except:
-                return jsonify({"status": "fail", "message": "unauthorized"}), 401
+                return {"status": "fail", "message": "unauthorized"}, 401
             return f(*args, **kwargs)
         else:
-            return jsonify({"status": "fail", "message": "unauthorized"}), 401
+            return {"status": "fail", "message": "unauthorized"}, 401
     return decorated
 
 
