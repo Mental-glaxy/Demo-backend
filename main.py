@@ -40,7 +40,7 @@ def index():
 
 @app.route("/login", methods=["POST"])
 def login():
-    return controller.login(db, request, secret, bcrypt)
+    return controller.login(db,request,secret,bcrypt)
 
 
 @app.route("/register",  methods=["POST"])
@@ -56,13 +56,13 @@ def logout():
 @app.route("/stats",  methods=["GET"])
 @tokenReq
 def get_stats():
-    return "Статистика"
+    return controller.stats(db)
 
 
 @app.route("/save-stats",  methods=["Post"])
 @tokenReq
 def save_stats():
-    return "Статистика сохранена!"
+    return controller.save_stats(request, db)
 
 
 @app.route("/account",  methods=["GET"])
@@ -70,7 +70,5 @@ def save_stats():
 def get_info():
     return "Инфо об аккаунте"
 
-
-if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000)
+app.run(host="0.0.0.0", port=5000)
 
