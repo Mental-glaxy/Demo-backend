@@ -6,8 +6,9 @@ class Controller:
     def __init__(self):
         pass
 
-    def signup(self, db, request, bcrypt):
+    def signup(self, db, request, bcrypt, secret):
         message = ""
+        token = ""
         code = 500
         status = "fail"
         try:
@@ -23,7 +24,16 @@ class Controller:
                 data['created'] = datetime.now()
                 # this is bad practice since the data is not being checked before insert
                 res = db["users"].insert_one(data)
+                print(res)
                 if res.acknowledged:
+                    time = datetime.utcnow() + timedelta(days=365)
+                    token = jwt.encode({
+                        "user": {
+                            "login": f"{data['login']}",
+                            "email": f"{data['email']}",
+                        },
+                        "exp": time
+                    }, secret)
                     status = "successful"
                     message = "user created successfully"
                     code = 201
@@ -31,7 +41,7 @@ class Controller:
             message = f"{ex}"
             status = "fail"
             code = 500
-        return ({'status': status, "message": message}, code)
+        return ({'status': status, "message": message, "token": token.decode('utf-8')}, code)
 
     def login(self, db, request, secret, bcrypt):
         message = ""
@@ -44,7 +54,7 @@ class Controller:
             if user:
                 user['_id'] = str(user['_id'])
                 if user and bcrypt.check_password_hash(user['password'], data['password']):
-                    time = datetime.utcnow() + timedelta(hours=24)
+                    time = datetime.utcnow() + timedelta(days=365)
                     token = jwt.encode({
                         "user": {
                             "login": f"{user['login']}",

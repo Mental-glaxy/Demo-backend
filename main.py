@@ -70,5 +70,5 @@ def save_stats():
 def get_info():
     return "Инфо об аккаунте"
 
-app.run(host="0.0.0.0", port=5000)
+app.run(host="0.0.0.0", port=5000,debug=True)
 
