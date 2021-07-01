@@ -3,7 +3,6 @@ from pymongo import MongoClient
 from flask_bcrypt import Bcrypt
 from functools import wraps
 from flask_cors import CORS
-from flask_jwt  import JWT, jwt_required,current_identity
 import controllers.Config as config
 import controllers.Controller as ctrl
 import jwt
@@ -59,7 +58,7 @@ def get_stats():
     return controller.stats(db)
 
 
-@app.route("/save-stats",  methods=["Post"])
+@app.route("/save-stats",  methods=["POST"])
 @tokenReq
 def save_stats():
     return controller.save_stats(request, db)
@@ -68,7 +67,7 @@ def save_stats():
 @app.route("/account",  methods=["GET"])
 @tokenReq
 def get_info():
-    return "Инфо об аккаунте"
+    return "Account info"
 
 app.run(host="0.0.0.0", port=5000,debug=True)
 
