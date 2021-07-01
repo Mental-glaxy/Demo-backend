@@ -5,7 +5,7 @@ __pycache__/
 
 # C extensions
 *.so
-controllers/Config.py
+*Config.py
 # Distribution / packaging
 .Python
 build/

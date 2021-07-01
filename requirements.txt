@@ -5,3 +5,4 @@ PyJWT
 Flask-Bcrypt
 Flask-Cors
 Flask-JWT
+pymongo[tls,srv]==3.6.1
