@@ -23,7 +23,7 @@ def tokenReq(f):
         if "Authorization" in request.headers:
             token = request.headers["Authorization"]
             try:
-                jwt.decode(str(token), secret, algorithms="HS256")
+                jwt.decode(token, secret, algorithms="HS256")
             except:
                 return {"status": "fail", "message": "unauthorized"}, 401
             return f(*args, **kwargs)
@@ -69,5 +69,6 @@ def save_stats():
 def get_info():
     return "Account info"
 
-app.run(host="0.0.0.0", port=5000,debug=True)
+if __name__ == '__main__':
+      app.run(host='0.0.0.0')
 
