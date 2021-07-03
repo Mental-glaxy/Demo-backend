@@ -58,7 +58,7 @@ def get_stats():
     return controller.stats(db)
 
 
-@app.route("/save-stats",  methods=["POST"])
+@app.route("/stats",  methods=["POST"])
 @tokenReq
 def save_stats():
     return controller.save_stats(request, db)
