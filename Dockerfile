@@ -5,7 +5,6 @@ WORKDIR /app
 #RUN pip install libffi
 RUN apk add --no-cache libffi-dev build-base py2-pip python2-dev && pip install cffi
 RUN pip install -r requirements.txt
-ENV PORT 5000
 EXPOSE 5000
 ENTRYPOINT [ "python" ]
 CMD [ "main.py" ]
