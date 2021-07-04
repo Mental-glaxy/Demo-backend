@@ -41,7 +41,7 @@ class Controller:
             message = f"{ex}"
             status = "fail"
             code = 500
-        return ({'status': status, "message": message, "token": token.decode('utf-8')}, code)
+        return {'status': status, "message": message, "token": token.decode('utf-8')}, code
 
     def login(self, db, request, secret, bcrypt):
         message = ""
@@ -66,7 +66,7 @@ class Controller:
                     message = f"user authenticated"
                     code = 200
                     status = "successful"
-                    res_data['token'] = token.decode('utf-8')
+                    res_data['token'] = token
                     res_data['user'] = user
                 else:
                     message = "wrong password"
