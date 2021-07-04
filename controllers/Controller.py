@@ -41,7 +41,7 @@ class Controller:
             message = f"{ex}"
             status = "fail"
             code = 500
-        return ({'status': status, "message": message, "token": token.decode('utf-8')}, code)
+        return {'status': status, "message": message, "token": token.decode('utf-8')}, code
 
     def login(self, db, request, secret, bcrypt):
         message = ""
