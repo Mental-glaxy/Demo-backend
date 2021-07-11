@@ -15,14 +15,13 @@ class Controller:
             data = request.get_json()
             check = db['users'].find({"email": data['email']})
             if check.count() >= 1:
-                message = "Пользователь с таким email уже существует!"
+                message = "Email dublication error"
                 code = 401
                 status = "fail"
+                return ({'status': status, "message": message}, code)
             else:
-                # hashing the password so it's not stored in the db as it was
                 data['password'] = bcrypt.generate_password_hash(data['password']).decode('utf-8')
                 data['created'] = datetime.now()
-                # this is bad practice since the data is not being checked before insert
                 res = db["users"].insert_one(data)
                 print(res)
                 if res.acknowledged:
@@ -41,7 +40,7 @@ class Controller:
             message = f"{ex}"
             status = "fail"
             code = 500
-        return {'status': status, "message": message, "token": token.decode('utf-8')}, code
+        return ({'status': status, "message": message, "token": token}, code)
 
     def login(self, db, request, secret, bcrypt):
         message = ""
